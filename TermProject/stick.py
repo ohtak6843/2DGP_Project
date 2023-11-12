@@ -17,8 +17,8 @@ class Stick:
     def draw(self):
         dy = self.center_y - self.mouse_y
         dx = self.center_x - self.mouse_x
-        self.degree = atan2(dy, dx)
-        Stick.image.composite_draw(self.degree, '', self.center_x + self.r * cos(self.degree), self.center_y + self.r * sin(self.degree), 240, 240)  # 1/5 사이즈
+        degree = atan2(dy, dx)
+        Stick.image.composite_draw(degree, '', self.center_x + self.r * cos(degree), self.center_y + self.r * sin(degree), 240, 240)  # 1/5 사이즈
         pass
 
     def update(self):
