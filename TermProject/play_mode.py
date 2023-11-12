@@ -1,11 +1,13 @@
 from pico2d import *
 import game_framework
-
 import game_world
-from grass import Grass
-from boy import Boy
 
-# boy = None
+from table import Table
+from stick import Stick
+from ball import Ball
+from heart import Heart
+
+WINDOW_WIDTH, WINDOW_HEIGHT = 1600, 900
 
 def handle_events():
     events = get_events()
@@ -14,20 +16,34 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
+        elif event.type == SDL_MOUSEMOTION:
+            stick.mouse_x, stick.mouse_y = event.x, WINDOW_HEIGHT - 1 - event.y
         else:
-            boy.handle_event(event)
+            stick.handle_event(event)
 
 def init():
-    global grass
-    global boy
+    global table
+    global stick
+    global white_ball
+    global balls
+    global heart
 
-    running = True
+    table = Table()
+    game_world.add_object(table, 0)
 
-    grass = Grass()
-    game_world.add_object(grass, 0)
+    white_ball = Ball(1000, 450, 3, 0)
+    game_world.add_object(white_ball, 1)
 
-    boy = Boy()
-    game_world.add_object(boy, 1)
+    stick = Stick(white_ball.x, white_ball.y)
+    game_world.add_object(stick, 1)
+
+    Balls = Ball(400, 450, 0, 0)
+    game_world.add_object(Balls, 1)
+
+    heart = Heart()
+    game_world.add_object(heart, 2)
+
+    pass
 
 
 def finish():
