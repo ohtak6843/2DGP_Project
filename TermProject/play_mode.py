@@ -16,8 +16,6 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
-        elif event.type == SDL_MOUSEMOTION:
-            stick.mouse_x, stick.mouse_y = event.x, WINDOW_HEIGHT - 1 - event.y
         else:
             stick.handle_event(event)
 
