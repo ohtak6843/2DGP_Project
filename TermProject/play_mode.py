@@ -1,6 +1,7 @@
 from pico2d import *
 import game_framework
 import game_world
+import math
 
 from table import Table
 from stick import Stick
@@ -52,6 +53,9 @@ def finish():
 def update():
     game_world.update()
     # delay(0.1)
+    if stick.r <= 135:
+        white_ball.degree = math.pi + stick.degree
+        white_ball.velo = 10
 
 
 def draw():

@@ -17,7 +17,7 @@ def ball_collide(e):
 class Idle:
     @staticmethod
     def enter(stick, e):
-        stick.r = 135
+        stick.r = 155
         pass
 
     @staticmethod
@@ -50,7 +50,7 @@ class Pull:
             stick.r += 1
 
         if get_time() - stick.wait_time >= 2:
-            stick.r = 135
+            stick.r = 155
             stick.wait_time = get_time()
         pass
 
@@ -145,7 +145,7 @@ class Stick:
     image = None
 
     def __init__(self, center_x, center_y):
-        self.r = 135
+        self.r = 155
         self.center_x = center_x
         self.center_y = center_y
         self.mouse_x = 0
