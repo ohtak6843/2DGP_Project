@@ -19,5 +19,5 @@ class Wall:
     def get_bb(self):
         return self.left, self.bottom, self.right, self.top
 
-    def handle_collide(self, group, other):
+    def handle_collision(self, group, other):
         pass
