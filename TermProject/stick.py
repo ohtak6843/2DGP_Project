@@ -1,5 +1,7 @@
 from pico2d import *
 from math import *
+import game_world
+import define
 
 
 def m_left_down(e):
@@ -30,11 +32,11 @@ class Idle:
 
     @staticmethod
     def draw(stick):
-        dy = stick.center_y - stick.mouse_y
-        dx = stick.center_x - stick.mouse_x
+        dy = stick.white_ball.y - stick.mouse_y
+        dx = stick.white_ball.x - stick.mouse_x
         stick.degree = atan2(dy, dx)
-        Stick.image.composite_draw(stick.degree, '', stick.center_x + stick.r * cos(stick.degree),
-                                   stick.center_y + stick.r * sin(stick.degree), 240, 240)  # 1/5 사이즈
+        Stick.image.composite_draw(stick.degree, '', stick.white_ball.x + stick.r * cos(stick.degree),
+                                   stick.white_ball.y + stick.r * sin(stick.degree), 240, 240)  # 1/5 사이즈
         pass
 
 
@@ -60,11 +62,11 @@ class Pull:
 
     @staticmethod
     def draw(stick):
-        dy = stick.center_y - stick.mouse_y
-        dx = stick.center_x - stick.mouse_x
+        dy = stick.white_ball.y - stick.mouse_y
+        dx = stick.white_ball.x - stick.mouse_x
         stick.degree = atan2(dy, dx)
-        Stick.image.composite_draw(stick.degree, '', stick.center_x + stick.r * cos(stick.degree),
-                                   stick.center_y + stick.r * sin(stick.degree), 240, 240)  # 1/5 사이즈
+        Stick.image.composite_draw(stick.degree, '', stick.white_ball.x + stick.r * cos(stick.degree),
+                                   stick.white_ball.y + stick.r * sin(stick.degree), 240, 240)  # 1/5 사이즈
 
 
 class Push:
@@ -85,11 +87,11 @@ class Push:
 
     @staticmethod
     def draw(stick):
-        dy = stick.center_y - stick.mouse_y
-        dx = stick.center_x - stick.mouse_x
+        dy = stick.white_ball.y - stick.mouse_y
+        dx = stick.white_ball.x - stick.mouse_x
         stick.degree = atan2(dy, dx)
-        Stick.image.composite_draw(stick.degree, '', stick.center_x + stick.r * cos(stick.degree),
-                                   stick.center_y + stick.r * sin(stick.degree), 240, 240)  # 1/5 사이즈
+        Stick.image.composite_draw(stick.degree, '', stick.white_ball.x + stick.r * cos(stick.degree),
+                                   stick.white_ball.y + stick.r * sin(stick.degree), 240, 240)  # 1/5 사이즈
 
 
 class Hide:
@@ -144,10 +146,9 @@ class stateMachine:
 class Stick:
     image = None
 
-    def __init__(self, center_x, center_y):
+    def __init__(self, white_ball):
         self.r = 155
-        self.center_x = center_x
-        self.center_y = center_y
+        self.white_ball = white_ball
         self.mouse_x = 0
         self.mouse_y = 0
         self.degree = 0
@@ -170,5 +171,9 @@ class Stick:
         self.state_machine.handle_event(('INPUT', e))
         if self.state_machine.cur_state == Idle:
             if e.type == SDL_MOUSEMOTION:
-                self.mouse_x, self.mouse_y = e.x, 900 - 1 - e.y
+                self.mouse_x, self.mouse_y = e.x, define.WINDOW_HEIGHT - 1 - e.y
+        pass
+
+    def get_bb(self):
+        return self.white_ball.x, self.white_ball.y, self.white_ball.x, self.white_ball.y
         pass
