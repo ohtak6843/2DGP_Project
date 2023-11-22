@@ -1,5 +1,5 @@
 from pico2d import *
-from math import cos, sin
+from math import cos, sin, atan2, pi
 
 from game_world import collide
 
@@ -36,16 +36,22 @@ class Ball:
 
 
     def handle_collision(self, group, other):
-        print(f'collision : {group}')
-        if group == 'Ball:Ball':
+        if group == 'Ball:Ball' and self != other:
+            print(f'collision : {group}')
             # 충돌 시 충돌 위치 재조정
-            # while collide(self, other):
-            #     self.x += self.velo * cos(self.degree + math.pi)
-            #     self.y += self.velo * sin(self.degree + math.pi)
-            #     other.x += other.velo * cos(other.degree + math.pi)
-            #     other.y += other.velo * sin(other.degree + math.pi)
+
+            temp_velo = self.velo + other.velo
+            while collide(self, other):
+                self.x += temp_velo * cos(self.degree + math.pi)
+                self.y += temp_velo * sin(self.degree + math.pi)
                 
             # 각도 조정
+            
+
+            # 속도 조정
+            self.velo = 5
+            other.velo = 5
+
             pass
         elif group == 'Stick:Ball':
             self.degree = other.degree + math.pi
@@ -58,10 +64,10 @@ class Ball:
                 self.y += sin(self.degree + math.pi)
 
             # 각도 조정
-            collision_rad = self.degree - other.degree
-            out_rad = other.degree - collision_rad
+            in_degree = self.degree - other.degree
+            out_degree = other.degree - in_degree
 
-            self.degree = out_rad
+            self.degree = out_degree
 
             pass
         pass

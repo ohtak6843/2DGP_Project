@@ -57,9 +57,12 @@ def init():
     stick = Stick(white_ball)
     game_world.add_object(stick, 1)
     game_world.add_collision_pair('Stick:Ball', stick, white_ball)
+    game_world.add_collision_pair('Ball:Ball', white_ball, white_ball)
 
     Balls = Ball(400, 450, 0, 0)
     game_world.add_object(Balls, 1)
+    game_world.add_collision_pair('Wall:Ball', None, Balls)
+    game_world.add_collision_pair('Ball:Ball', Balls, Balls)
 
     # heart = Heart()
     # game_world.add_object(heart, 2)

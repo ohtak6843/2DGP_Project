@@ -107,7 +107,7 @@ class Hide:
         pass
 
     @staticmethod
-    def draw(self):
+    def draw(stick):
         pass
 
 
