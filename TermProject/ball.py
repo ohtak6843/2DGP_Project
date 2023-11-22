@@ -84,9 +84,11 @@ class Ball:
             other.degree = atan2(other_Fvec_y, other_Fvec_x)
 
             self.velo = sqrt(my_Fvec_x ** 2 + my_Fvec_y ** 2)
-            other.velo = sqrt(other_Fvec_x ** 2 + other_Fvec_y ** 2)\
+            other.velo = sqrt(other_Fvec_x ** 2 + other_Fvec_y ** 2)
 
-            remove_object(other)
+            print(other_normalVelo_x, other_normalVelo_y)
+
+            remove_object(self)
 
             pass
         elif group == 'Stick:Ball':
