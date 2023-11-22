@@ -3,11 +3,12 @@ from pico2d import *
 
 class Wall:
 
-    def __init__(self, left, bottom, right, top):
+    def __init__(self, left, bottom, right, top, degree):
         self.left = left
         self.bottom = bottom
         self.right = right
         self.top = top
+        self.degree = degree
 
     def draw(self):
         draw_rectangle(*self.get_bb())

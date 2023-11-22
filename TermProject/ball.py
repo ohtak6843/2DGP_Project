@@ -1,6 +1,8 @@
 from pico2d import *
 from math import cos, sin
 
+from game_world import collide
+
 
 class Ball:
     image = None
@@ -34,13 +36,32 @@ class Ball:
 
 
     def handle_collision(self, group, other):
-        if group == 'ball:ball':
+        print(f'collision : {group}')
+        if group == 'Ball:Ball':
+            # 충돌 시 충돌 위치 재조정
+            # while collide(self, other):
+            #     self.x += self.velo * cos(self.degree + math.pi)
+            #     self.y += self.velo * sin(self.degree + math.pi)
+            #     other.x += other.velo * cos(other.degree + math.pi)
+            #     other.y += other.velo * sin(other.degree + math.pi)
+                
+            # 각도 조정
             pass
-        elif group == 'stick:ball':
+        elif group == 'Stick:Ball':
+            self.degree = other.degree + math.pi
+            self.velo = 10
             pass
-        elif group == 'LR_wall:ball':
-            self.degree += math.pi
-            pass
-        elif group == 'TB_wall:ball':
+        elif group == 'Wall:Ball':
+            # 충돌 시 충돌 위치 재조정
+            while collide(self, other):
+                self.x += cos(self.degree + math.pi)
+                self.y += sin(self.degree + math.pi)
+
+            # 각도 조정
+            collision_rad = self.degree - other.degree
+            out_rad = other.degree - collision_rad
+
+            self.degree = out_rad
+
             pass
         pass

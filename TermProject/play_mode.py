@@ -30,28 +30,33 @@ def init():
     table = Table()
     game_world.add_object(table, 0)
 
-    left_wall = Wall(70, 190, 150, 700)
+    left_wall = Wall(70, 190, 150, 700, math.pi / 2)
     game_world.add_object(left_wall, 0)
-    right_wall = Wall(1463, 190, 1545, 700)
+    right_wall = Wall(1463, 190, 1545, 700, math.pi / 2)
     game_world.add_object(right_wall, 0)
-    game_world.add_collision_pair('LR_wall:ball', left_wall, None)
-    game_world.add_collision_pair('LR_wall:ball', right_wall, None)
+    game_world.add_collision_pair('Wall:Ball', left_wall, None)
+    game_world.add_collision_pair('Wall:Ball', right_wall, None)
 
-    top_left_wall = Wall(203, 745, 760, 818)
+    top_left_wall = Wall(203, 745, 760, 818, 0)
     game_world.add_object(top_left_wall, 0)
-    top_right_wall = Wall(852, 745, 1412,818)
+    top_right_wall = Wall(852, 745, 1412,818, 0)
     game_world.add_object(top_right_wall, 0)
-    bottom_left_wall = Wall(203, 70, 760, 144)
+    bottom_left_wall = Wall(203, 70, 760, 144, 0)
     game_world.add_object(bottom_left_wall, 0)
-    bottom_right_wall = Wall(852, 70, 1412,144)
+    bottom_right_wall = Wall(852, 70, 1412,144, 0)
     game_world.add_object(bottom_right_wall, 0)
+    game_world.add_collision_pair('Wall:Ball', top_left_wall, None)
+    game_world.add_collision_pair('Wall:Ball', top_right_wall, None)
+    game_world.add_collision_pair('Wall:Ball', bottom_left_wall, None)
+    game_world.add_collision_pair('Wall:Ball', bottom_right_wall, None)
 
     white_ball = Ball(1000, 450, 3, 0)
     game_world.add_object(white_ball, 1)
-    game_world.add_collision_pair('LR_wall:ball', None, white_ball)
+    game_world.add_collision_pair('Wall:Ball', None, white_ball)
 
     stick = Stick(white_ball)
     game_world.add_object(stick, 1)
+    game_world.add_collision_pair('Stick:Ball', stick, white_ball)
 
     Balls = Ball(400, 450, 0, 0)
     game_world.add_object(Balls, 1)
@@ -59,7 +64,7 @@ def init():
     # heart = Heart()
     # game_world.add_object(heart, 2)
 
-    white_ball.velo = 10
+    # white_ball.velo = 10
 
     pass
 
@@ -73,9 +78,6 @@ def update():
     game_world.update()
     game_world.handle_collisions()
     # delay(0.1)
-    # if stick.r <= 135:
-    #     game_framework.stack[0].white_ball.degree = math.pi + stick.degree
-    #     game_framework.stack[0].white_ball.velo = 10
 
 
 
