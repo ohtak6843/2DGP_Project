@@ -1,8 +1,8 @@
 from pico2d import *
 from define import *
-from math import cos, sin, atan2, pi
+from math import cos, sin, atan2, pi, sqrt
 
-from game_world import collide
+from game_world import collide, remove_object
 
 
 class Ball:
@@ -69,10 +69,24 @@ class Ball:
 
             my_velo_x = other_normalVelo_x
             my_velo_y = other_normalVelo_y
+            my_velo = sqrt(my_velo_x ** 2 + my_velo_y ** 2)
             other_velo_x = my_normalVelo_x
             other_velo_y = my_normalVelo_y
+            other_velo = sqrt(other_velo_x ** 2 + other_velo_y ** 2)
 
-            
+            my_verVelo_x, my_verVelo_y = my_normalVelo_x * my_velo, my_normalVelo_y * my_velo
+            other_verVelo_x, other_verVelo_y = other_normalVelo_x * other_velo, other_normalVelo_y * other_velo
+
+            my_Fvec_x, my_Fvec_y = my_tangentVelo_x + my_verVelo_x, my_tangentVelo_y + my_verVelo_y
+            other_Fvec_x, other_Fvec_y = other_tangentVelo_x + other_verVelo_x, other_tangentVelo_y + other_verVelo_y
+
+            self.degree = atan2(my_Fvec_y, my_Fvec_x)
+            other.degree = atan2(other_Fvec_y, other_Fvec_x)
+
+            self.velo = sqrt(my_Fvec_x ** 2 + my_Fvec_y ** 2)
+            other.velo = sqrt(other_Fvec_x ** 2 + other_Fvec_y ** 2)\
+
+            remove_object(other)
 
             pass
         elif group == 'Stick:Ball':
