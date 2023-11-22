@@ -1,4 +1,5 @@
 from pico2d import *
+from define import *
 from math import cos, sin, atan2, pi
 
 from game_world import collide
@@ -7,7 +8,7 @@ from game_world import collide
 class Ball:
     image = None
 
-    def __init__(self, x, y, image_x = 0, image_y = 0):
+    def __init__(self, x, y, image_x=0, image_y=0):
         self.x = x
         self.y = y
 
@@ -29,28 +30,44 @@ class Ball:
         self.y += self.velo * sin(self.degree)
         pass
 
-
     def get_bb(self):
         return self.x - 20, self.y - 20, self.x + 20, self.y + 20
         pass
 
-
     def handle_collision(self, group, other):
+        if self != other: print(f'collision : {group}')
         if group == 'Ball:Ball' and self != other:
-            print(f'collision : {group}')
+            if not collide(self, other): return
+
             # 충돌 시 충돌 위치 재조정
-
-            temp_velo = self.velo + other.velo
             while collide(self, other):
-                self.x += temp_velo * cos(self.degree + math.pi)
-                self.y += temp_velo * sin(self.degree + math.pi)
-                
-            # 각도 조정
-            
+                self.x += self.velo * cos(self.degree + math.pi)
+                self.y += self.velo * sin(self.degree + math.pi)
+                other.x += other.velo * cos(other.degree + math.pi)
+                other.y += other.velo * sin(other.degree + math.pi)
 
-            # 속도 조정
-            self.velo = 5
-            other.velo = 5
+            # 각도 및 속도 조정
+            dy = other.y - self.y
+            dx = other.x - self.x
+
+            temp = normalize(dy, dx)
+            my_normal_x, my_normal_y = temp[0], temp[1]
+            other_normal_x, other_normal_y = -temp[0], -temp[1]
+
+            my_normalVelo_size = self.velo * cos(self.degree) * my_normal_x + self.velo * sin(self.degree) * my_normal_y
+            other_normalVelo_size = other.velo * cos(other.degree) * other_normal_x + other.velo * sin(other.degree) * other_normal_y
+
+            my_normalVelo_x = my_normalVelo_size * my_normal_x
+            my_normalVelo_y = my_normalVelo_size * my_normal_y
+            other_normalVelo_x = other_normalVelo_size * other_normal_x
+            other_normalVelo_y = other_normalVelo_size * other_normal_y
+
+            my_tangentVelo_x = self.velo * cos(self.degree) - my_normalVelo_x
+            my_tangentVelo_y = self.velo * sin(self.degree) - my_normalVelo_y
+            other_tangentVelo_x = other.velo * cos(other.degree) - other_normalVelo_x
+            other_tangentVelo_y = other.velo * sin(other.degree) - other_normalVelo_y
+
+            
 
             pass
         elif group == 'Stick:Ball':
