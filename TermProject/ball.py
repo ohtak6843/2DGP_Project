@@ -67,6 +67,11 @@ class Ball:
             other_tangentVelo_x = other.velo * cos(other.degree) - other_normalVelo_x
             other_tangentVelo_y = other.velo * sin(other.degree) - other_normalVelo_y
 
+            my_velo_x = other_normalVelo_x
+            my_velo_y = other_normalVelo_y
+            other_velo_x = my_normalVelo_x
+            other_velo_y = my_normalVelo_y
+
             
 
             pass
