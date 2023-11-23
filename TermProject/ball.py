@@ -82,7 +82,9 @@ class Ball:
             self.velo = sqrt(self_Fx ** 2 + self_Fy ** 2)
             other.velo = sqrt(other_Fx ** 2 + other_Fy ** 2)
 
-            # remove_object(self)
+
+            print(self.velo * cos(self.degree) + other.velo * cos(self.degree))
+            print(self.velo * sin(self.degree) + other.velo * sin(self.degree))
 
             pass
         elif group == 'Stick:Ball':
