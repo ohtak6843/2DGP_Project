@@ -50,45 +50,39 @@ class Ball:
             dy = other.y - self.y
             dx = other.x - self.x
 
-            temp = normalize(dy, dx)
-            my_normal_x, my_normal_y = temp[0], temp[1]
-            other_normal_x, other_normal_y = -temp[0], -temp[1]
+            temp = normalize(dx, dy)
+            self_normalize_Nx, self_normalize_Ny = temp[0], temp[1]
+            other_normalize_Nx, other_normalize_Ny = -temp[0], -temp[1]
 
-            my_normalVelo_size = self.velo * cos(self.degree) * my_normal_x + self.velo * sin(self.degree) * my_normal_y
-            other_normalVelo_size = other.velo * cos(other.degree) * other_normal_x + other.velo * sin(other.degree) * other_normal_y
+            self_N_size = self.velo * cos(self.degree) * self_normalize_Nx + self.velo * sin(self.degree) * self_normalize_Ny
+            other_N_size = other.velo * cos(other.degree) * other_normalize_Nx + other.velo * sin(other.degree) * other_normalize_Ny
 
-            my_normalVelo_x = my_normalVelo_size * my_normal_x
-            my_normalVelo_y = my_normalVelo_size * my_normal_y
-            other_normalVelo_x = other_normalVelo_size * other_normal_x
-            other_normalVelo_y = other_normalVelo_size * other_normal_y
+            self_Nx = self_N_size * self_normalize_Nx
+            self_Ny = self_N_size * self_normalize_Ny
+            other_Nx = other_N_size * other_normalize_Nx
+            other_Ny = other_N_size * other_normalize_Ny
 
-            my_tangentVelo_x = self.velo * cos(self.degree) - my_normalVelo_x
-            my_tangentVelo_y = self.velo * sin(self.degree) - my_normalVelo_y
-            other_tangentVelo_x = other.velo * cos(other.degree) - other_normalVelo_x
-            other_tangentVelo_y = other.velo * sin(other.degree) - other_normalVelo_y
+            self_Tx = self.velo * cos(self.degree) - self_Nx
+            self_Ty = self.velo * sin(self.degree) - self_Ny
+            other_Tx = other.velo * cos(other.degree) - other_Nx
+            other_Ty = other.velo * sin(other.degree) - other_Ny
 
-            my_velo_x = other_normalVelo_x
-            my_velo_y = other_normalVelo_y
-            my_velo = sqrt(my_velo_x ** 2 + my_velo_y ** 2)
-            other_velo_x = my_normalVelo_x
-            other_velo_y = my_normalVelo_y
-            other_velo = sqrt(other_velo_x ** 2 + other_velo_y ** 2)
+            self_after_N_size = sqrt(other_Nx ** 2 + other_Ny ** 2)
+            other_after_N_size = sqrt(self_Nx ** 2 + self_Ny ** 2)
 
-            my_verVelo_x, my_verVelo_y = my_normalVelo_x * my_velo, my_normalVelo_y * my_velo
-            other_verVelo_x, other_verVelo_y = other_normalVelo_x * other_velo, other_normalVelo_y * other_velo
+            self_after_Nx, self_after_Ny = other_normalize_Nx * self_after_N_size, other_normalize_Ny * self_after_N_size
+            other_after_Nx, other_after_Ny = self_normalize_Nx * other_after_N_size, self_normalize_Ny * other_after_N_size
 
-            my_Fvec_x, my_Fvec_y = my_tangentVelo_x + my_verVelo_x, my_tangentVelo_y + my_verVelo_y
-            other_Fvec_x, other_Fvec_y = other_tangentVelo_x + other_verVelo_x, other_tangentVelo_y + other_verVelo_y
+            self_Fx, self_Fy = self_Tx + self_after_Nx, self_Ty + self_after_Ny
+            other_Fx, other_Fy = other_Tx + other_after_Nx, other_Ty + other_after_Ny
 
-            self.degree = atan2(my_Fvec_y, my_Fvec_x)
-            other.degree = atan2(other_Fvec_y, other_Fvec_x)
+            self.degree = atan2(self_Fy, self_Fx)
+            other.degree = atan2(other_Fy, other_Fx)
 
-            self.velo = sqrt(my_Fvec_x ** 2 + my_Fvec_y ** 2)
-            other.velo = sqrt(other_Fvec_x ** 2 + other_Fvec_y ** 2)
+            self.velo = sqrt(self_Fx ** 2 + self_Fy ** 2)
+            other.velo = sqrt(other_Fx ** 2 + other_Fy ** 2)
 
-            print(other_normalVelo_x, other_normalVelo_y)
-
-            remove_object(self)
+            # remove_object(self)
 
             pass
         elif group == 'Stick:Ball':
