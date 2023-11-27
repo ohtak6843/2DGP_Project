@@ -5,6 +5,9 @@ from math import cos, sin, atan2, pi, sqrt
 from game_world import collide, remove_object
 
 
+PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
+
+
 class Ball:
     image = None
 
@@ -28,6 +31,12 @@ class Ball:
     def update(self):
         self.x += self.velo * cos(self.degree)
         self.y += self.velo * sin(self.degree)
+
+        BALL_SPEED_KMPH = 40.0  # Km / Hour
+        BALL_SPEED_MPM = (BALL_SPEED_KMPH * 1000.0 / 60.0)
+        BALL_SPEED_MPS = (BALL_SPEED_MPM / 60.0)
+        BALL_SPEED_PPS = (BALL_SPEED_MPS * PIXEL_PER_METER)
+
         pass
 
     def get_bb(self):
