@@ -5,11 +5,11 @@ from math import cos, sin, atan2, pi, sqrt
 from game_world import collide, remove_object
 
 
-PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
-
 
 class Ball:
     image = None
+
+    size = [PIXEL_PER_METER * 0.06, PIXEL_PER_METER * 0.06]
 
     def __init__(self, x, y, image_x=0, image_y=0):
         self.x = x
@@ -25,7 +25,7 @@ class Ball:
             Ball.image = load_image('balls.png')
 
     def draw(self):
-        Ball.image.clip_draw(self.image_x * 276, self.image_y * 276, 276, 276, self.x, self.y, 40, 40)  # 1/10 사이즈
+        Ball.image.clip_draw(self.image_x * 276, self.image_y * 276, 276, 276, self.x, self.y, Ball.size[0], Ball.size[1])  # 1/10 사이즈
         draw_rectangle(*self.get_bb())
 
     def update(self):
@@ -40,7 +40,7 @@ class Ball:
         pass
 
     def get_bb(self):
-        return self.x - 20, self.y - 20, self.x + 20, self.y + 20
+        return self.x - Ball.size[0] / 2, self.y - Ball.size[1] / 2, self.x + Ball.size[0] / 2, self.y + Ball.size[1] / 2
         pass
 
     def handle_collision(self, group, other):

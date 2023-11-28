@@ -1,7 +1,9 @@
 from pico2d import *
 from math import *
+from define import *
+
 import game_world
-import define
+import game_framework
 
 
 def m_left_down(e):
@@ -16,10 +18,23 @@ def ball_collide(e):
     return e[0] == 'BALL_COLLIDE'
 
 
+
+INIT_R = PIXEL_PER_METER * 1
+PULL_MAX_R = PIXEL_PER_METER * 1.5
+
+# BALL_SPEED_KMPH = 40.0  # Km / Hour
+# BALL_SPEED_MPM = (BALL_SPEED_KMPH * 1000.0 / 60.0)
+PULL_SPEED_MPS = 0.5
+PULL_SPEED_PPS = (PULL_SPEED_MPS * PIXEL_PER_METER)
+
+PUSH_SPEED_MPS = 3.0
+PUSH_SPEED_PPS = (PUSH_SPEED_MPS * PIXEL_PER_METER)
+
+
 class Idle:
     @staticmethod
     def enter(stick, e):
-        stick.r = 155
+        stick.r = INIT_R
         pass
 
     @staticmethod
@@ -36,7 +51,7 @@ class Idle:
         dx = stick.white_ball.x - stick.mouse_x
         stick.degree = atan2(dy, dx)
         Stick.image.composite_draw(stick.degree, '', stick.white_ball.x + stick.r * cos(stick.degree),
-                                   stick.white_ball.y + stick.r * sin(stick.degree), stick.width, stick.height)  # 1/5 사이즈
+                                   stick.white_ball.y + stick.r * sin(stick.degree), Stick.size[0], Stick.size[1])  # 1/5 사이즈
         pass
 
 
@@ -48,11 +63,11 @@ class Pull:
 
     @staticmethod
     def do(stick):
-        if stick.r <= 185:
-            stick.r += 1
+        if stick.r <= PULL_MAX_R:
+            stick.r += game_framework.frame_time * PULL_SPEED_PPS
 
         if get_time() - stick.wait_time >= 2:
-            stick.r = 155
+            stick.r = INIT_R
             stick.wait_time = get_time()
         pass
 
@@ -66,7 +81,7 @@ class Pull:
         dx = stick.white_ball.x - stick.mouse_x
         stick.degree = atan2(dy, dx)
         Stick.image.composite_draw(stick.degree, '', stick.white_ball.x + stick.r * cos(stick.degree),
-                                   stick.white_ball.y + stick.r * sin(stick.degree), stick.width, stick.height)  # 1/5 사이즈
+                                   stick.white_ball.y + stick.r * sin(stick.degree), Stick.size[0], Stick.size[1])  # 1/5 사이즈
 
 
 class Push:
@@ -76,7 +91,7 @@ class Push:
 
     @staticmethod
     def do(stick):
-        stick.r -= 1
+        stick.r -= game_framework.frame_time * PUSH_SPEED_PPS
         pass
 
     @staticmethod
@@ -89,13 +104,13 @@ class Push:
         dx = stick.white_ball.x - stick.mouse_x
         stick.degree = atan2(dy, dx)
         Stick.image.composite_draw(stick.degree, '', stick.white_ball.x + stick.r * cos(stick.degree),
-                                   stick.white_ball.y + stick.r * sin(stick.degree), stick.width, stick.height)  # 1/5 사이즈
+                                   stick.white_ball.y + stick.r * sin(stick.degree), Stick.size[0], Stick.size[1])  # 1/5 사이즈
 
 
 class Hide:
     @staticmethod
     def enter(stick, e):
-        stick.r = 155
+        stick.r = INIT_R
         pass
 
     @staticmethod
@@ -145,11 +160,11 @@ class stateMachine:
 class Stick:
     image = None
 
-    def __init__(self, white_ball, width = 240, height = 240):
-        self.r = 155
+    size = [PIXEL_PER_METER * 1.4, PIXEL_PER_METER * 0.7]
+
+    def __init__(self, white_ball):
+        self.r = INIT_R
         self.white_ball = white_ball
-        self.width = width
-        self.height = height
         self.mouse_x = 0
         self.mouse_y = 0
         self.degree = 0
@@ -172,16 +187,16 @@ class Stick:
 
     def handle_event(self, e):
         self.state_machine.handle_event(('INPUT', e))
-        if self.state_machine.cur_state == Idle:
+        if self.state_machine.cur_state is Idle or self.state_machine.cur_state is Pull:
             if e.type == SDL_MOUSEMOTION:
-                self.mouse_x, self.mouse_y = e.x, define.WINDOW_HEIGHT - 1 - e.y
+                self.mouse_x, self.mouse_y = e.x, WINDOW_HEIGHT - 1 - e.y
         pass
 
     def get_bb(self):
-        left = self.white_ball.x + (self.r - self.width / 2) * cos(self.degree)
-        bottom = self.white_ball.y + (self.r - self.height / 2) * sin(self.degree)
-        right = self.white_ball.x + (self.r + self.width / 2) * cos(self.degree)
-        top = self.white_ball.y + (self.r + self.height / 2) * sin(self.degree)
+        left = self.white_ball.x + (self.r - Stick.size[0] / 2) * cos(self.degree)
+        bottom = self.white_ball.y + (self.r - Stick.size[1]) * sin(self.degree)
+        right = self.white_ball.x + (self.r + Stick.size[0] / 2) * cos(self.degree)
+        top = self.white_ball.y + (self.r + Stick.size[1]) * sin(self.degree)
 
         if left > right:
             left, right = right, left
