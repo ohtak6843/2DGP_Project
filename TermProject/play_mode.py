@@ -6,9 +6,10 @@ import define
 
 from table import Table
 from stick import Stick
-from ball import Ball
+from ball import Ball, is_ball_stop, is_balls_stop
 from heart import Heart
 from wall import Wall
+from hole import Hole
 
 def handle_events():
     events = get_events()
@@ -59,15 +60,18 @@ def init():
     game_world.add_collision_pair('Stick:Ball', stick, white_ball)
     game_world.add_collision_pair('Ball:Ball', white_ball, white_ball)
 
-    Balls = Ball(400, 450, 0, 0)
-    game_world.add_object(Balls, 1)
-    game_world.add_collision_pair('Wall:Ball', None, Balls)
-    game_world.add_collision_pair('Ball:Ball', Balls, Balls)
+    ball1 = Ball(400, 450, 0, 0)
+    ball2 = Ball(300, 350, 0, 1)
+    balls = []
+    balls.append(ball1)
+    balls.append(ball2)
+    game_world.add_objects(balls, 1)
+    for b in balls:
+        game_world.add_collision_pair('Wall:Ball', None, b)
+        game_world.add_collision_pair('Ball:Ball', b, b)
 
-    # heart = Heart()
-    # game_world.add_object(heart, 2)
-
-    # white_ball.velo = 10
+    heart = Heart()
+    game_world.add_object(heart, 2)
 
     pass
 
@@ -80,7 +84,10 @@ def finish():
 def update():
     game_world.update()
     game_world.handle_collisions()
-    # delay(0.1)
+
+    # 공 속도 0되면 스틱 다시 나오게
+    if is_ball_stop(white_ball) and is_balls_stop(balls):
+        stick.state_machine.handle_event(('ALL_STOP', 0))
 
 
 
