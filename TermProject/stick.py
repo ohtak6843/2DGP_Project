@@ -18,6 +18,9 @@ def ball_collide(e):
     return e[0] == 'BALL_COLLIDE'
 
 
+def balls_all_stop(e):
+    return e[0] == 'ALL_STOP'
+
 
 INIT_R = PIXEL_PER_METER * 1
 PULL_MAX_R = PIXEL_PER_METER * 1.5
@@ -51,7 +54,8 @@ class Idle:
         dx = stick.white_ball.x - stick.mouse_x
         stick.degree = atan2(dy, dx)
         Stick.image.composite_draw(stick.degree, '', stick.white_ball.x + stick.r * cos(stick.degree),
-                                   stick.white_ball.y + stick.r * sin(stick.degree), Stick.width, Stick.height)  # 1/5 사이즈
+                                   stick.white_ball.y + stick.r * sin(stick.degree), Stick.width,
+                                   Stick.height)  # 1/5 사이즈
         pass
 
 
@@ -81,7 +85,8 @@ class Pull:
         dx = stick.white_ball.x - stick.mouse_x
         stick.degree = atan2(dy, dx)
         Stick.image.composite_draw(stick.degree, '', stick.white_ball.x + stick.r * cos(stick.degree),
-                                   stick.white_ball.y + stick.r * sin(stick.degree), Stick.width, Stick.height)  # 1/5 사이즈
+                                   stick.white_ball.y + stick.r * sin(stick.degree), Stick.width,
+                                   Stick.height)  # 1/5 사이즈
 
 
 class Push:
@@ -104,7 +109,8 @@ class Push:
         dx = stick.white_ball.x - stick.mouse_x
         stick.degree = atan2(dy, dx)
         Stick.image.composite_draw(stick.degree, '', stick.white_ball.x + stick.r * cos(stick.degree),
-                                   stick.white_ball.y + stick.r * sin(stick.degree), Stick.width, Stick.height)  # 1/5 사이즈
+                                   stick.white_ball.y + stick.r * sin(stick.degree), Stick.width,
+                                   Stick.height)  # 1/5 사이즈
 
 
 class Hide:
@@ -134,7 +140,7 @@ class stateMachine:
             Idle: {m_left_down: Pull},
             Pull: {m_left_up: Push},
             Push: {ball_collide: Hide},
-            Hide: {}
+            Hide: {balls_all_stop: Idle},
         }
 
     def start(self):
@@ -180,18 +186,15 @@ class Stick:
         self.state_machine.draw()
         if self.state_machine.cur_state != Hide:
             draw_rectangle(*self.get_bb())
-        pass
 
     def update(self):
         self.state_machine.update()
-        pass
 
     def handle_event(self, e):
         self.state_machine.handle_event(('INPUT', e))
         if self.state_machine.cur_state is Idle or self.state_machine.cur_state is Pull:
             if e.type == SDL_MOUSEMOTION:
                 self.mouse_x, self.mouse_y = e.x, WINDOW_HEIGHT - 1 - e.y
-        pass
 
     def get_bb(self):
         left = self.white_ball.x + (self.r - Stick.width / 2) * cos(self.degree)
@@ -205,11 +208,7 @@ class Stick:
             bottom, top = top, bottom
 
         return left, bottom, right, top
-        pass
-
 
     def handle_collision(self, group, other):
         if group == 'Stick:Ball':
             self.state_machine.handle_event(('BALL_COLLIDE', 0))
-            pass
-        pass
