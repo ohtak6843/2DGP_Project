@@ -51,7 +51,7 @@ class Idle:
         dx = stick.white_ball.x - stick.mouse_x
         stick.degree = atan2(dy, dx)
         Stick.image.composite_draw(stick.degree, '', stick.white_ball.x + stick.r * cos(stick.degree),
-                                   stick.white_ball.y + stick.r * sin(stick.degree), Stick.size[0], Stick.size[1])  # 1/5 사이즈
+                                   stick.white_ball.y + stick.r * sin(stick.degree), Stick.width, Stick.height)  # 1/5 사이즈
         pass
 
 
@@ -81,7 +81,7 @@ class Pull:
         dx = stick.white_ball.x - stick.mouse_x
         stick.degree = atan2(dy, dx)
         Stick.image.composite_draw(stick.degree, '', stick.white_ball.x + stick.r * cos(stick.degree),
-                                   stick.white_ball.y + stick.r * sin(stick.degree), Stick.size[0], Stick.size[1])  # 1/5 사이즈
+                                   stick.white_ball.y + stick.r * sin(stick.degree), Stick.width, Stick.height)  # 1/5 사이즈
 
 
 class Push:
@@ -104,7 +104,7 @@ class Push:
         dx = stick.white_ball.x - stick.mouse_x
         stick.degree = atan2(dy, dx)
         Stick.image.composite_draw(stick.degree, '', stick.white_ball.x + stick.r * cos(stick.degree),
-                                   stick.white_ball.y + stick.r * sin(stick.degree), Stick.size[0], Stick.size[1])  # 1/5 사이즈
+                                   stick.white_ball.y + stick.r * sin(stick.degree), Stick.width, Stick.height)  # 1/5 사이즈
 
 
 class Hide:
@@ -160,7 +160,8 @@ class stateMachine:
 class Stick:
     image = None
 
-    size = [PIXEL_PER_METER * 1.4, PIXEL_PER_METER * 0.7]
+    width = PIXEL_PER_METER * 1.4
+    height = PIXEL_PER_METER * 0.7
 
     def __init__(self, white_ball):
         self.r = INIT_R
@@ -193,10 +194,10 @@ class Stick:
         pass
 
     def get_bb(self):
-        left = self.white_ball.x + (self.r - Stick.size[0] / 2) * cos(self.degree)
-        bottom = self.white_ball.y + (self.r - Stick.size[1]) * sin(self.degree)
-        right = self.white_ball.x + (self.r + Stick.size[0] / 2) * cos(self.degree)
-        top = self.white_ball.y + (self.r + Stick.size[1]) * sin(self.degree)
+        left = self.white_ball.x + (self.r - Stick.width / 2) * cos(self.degree)
+        bottom = self.white_ball.y + (self.r - Stick.width / 2) * sin(self.degree)
+        right = self.white_ball.x + (self.r + Stick.width / 2) * cos(self.degree)
+        top = self.white_ball.y + (self.r + Stick.width / 2) * sin(self.degree)
 
         if left > right:
             left, right = right, left
