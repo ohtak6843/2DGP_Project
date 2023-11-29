@@ -6,13 +6,27 @@ from game_world import collide, remove_object
 
 import game_framework
 
-FRICTION_SPEED_MPS = 0.2
+FRICTION_SPEED_MPS = 0.6
 FRICTION_SPEED_PPS = FRICTION_SPEED_MPS * PIXEL_PER_METER
+
+
+def is_ball_stop(b):
+    if b.velo is 0:
+        return True
+
+
+def is_balls_stop(balls):
+    for b in balls:
+        if not is_ball_stop(b):
+            return False
+
+    return True
+
 
 class Ball:
     image = None
 
-    size = PIXEL_PER_METER * 0.06
+    size = PIXEL_PER_METER * 0.08
 
     def __init__(self, x, y, image_x=0, image_y=0):
         self.x = x
@@ -32,17 +46,14 @@ class Ball:
         draw_rectangle(*self.get_bb())
 
     def update(self):
-        self.x += game_framework.frame_time * (self.velo * PIXEL_PER_METER)* cos(self.degree)
-        self.y += game_framework.frame_time * (self.velo * PIXEL_PER_METER)* sin(self.degree)
+        self.x += game_framework.frame_time * (self.velo * PIXEL_PER_METER) * cos(self.degree)
+        self.y += game_framework.frame_time * (self.velo * PIXEL_PER_METER) * sin(self.degree)
 
         self.velo -= game_framework.frame_time * FRICTION_SPEED_MPS
         if self.velo < 0: self.velo = 0
 
-        pass
-
     def get_bb(self):
         return self.x - Ball.size / 2, self.y - Ball.size / 2, self.x + Ball.size / 2, self.y + Ball.size / 2
-        pass
 
     def handle_collision(self, group, other):
         if self != other: print(f'collision : {group}')
@@ -64,8 +75,10 @@ class Ball:
             self_normalize_Nx, self_normalize_Ny = temp[0], temp[1]
             other_normalize_Nx, other_normalize_Ny = -temp[0], -temp[1]
 
-            self_N_size = self.velo * cos(self.degree) * self_normalize_Nx + self.velo * sin(self.degree) * self_normalize_Ny
-            other_N_size = other.velo * cos(other.degree) * other_normalize_Nx + other.velo * sin(other.degree) * other_normalize_Ny
+            self_N_size = self.velo * cos(self.degree) * self_normalize_Nx + self.velo * sin(
+                self.degree) * self_normalize_Ny
+            other_N_size = other.velo * cos(other.degree) * other_normalize_Nx + other.velo * sin(
+                other.degree) * other_normalize_Ny
 
             self_Nx = self_N_size * self_normalize_Nx
             self_Ny = self_N_size * self_normalize_Ny
@@ -92,15 +105,12 @@ class Ball:
             self.velo = sqrt(self_Fx ** 2 + self_Fy ** 2)
             other.velo = sqrt(other_Fx ** 2 + other_Fy ** 2)
 
-
             print(self.velo * cos(self.degree) + other.velo * cos(self.degree))
             print(self.velo * sin(self.degree) + other.velo * sin(self.degree))
 
-            pass
         elif group == 'Stick:Ball':
             self.degree = other.degree + math.pi
-            self.velo = 1
-            pass
+            self.velo = 3.0
         elif group == 'Wall:Ball':
             # 충돌 시 충돌 위치 재조정
             while collide(self, other):
@@ -112,6 +122,5 @@ class Ball:
             out_degree = other.degree - in_degree
 
             self.degree = out_degree
-
-            pass
-        pass
+        elif group == 'Hole:Ball':
+            remove_object(self)
