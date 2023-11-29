@@ -1,8 +1,11 @@
 from pico2d import *
 
+from define import *
+
 class Hole:
-    def __init__(self, x, y):
+    def __init__(self, x, y, width, height):
         self.x, self.y = x, y
+        self.width, self.height = width, height
 
 
     def draw(self):
@@ -19,4 +22,4 @@ class Hole:
 
 
     def get_bb(self):
-        return self.x - 10, self.y - 10, self.x + 10, self.y + 10
+        return self.x - self.width / 2, self.y - self.height / 2, self.x + self.width / 2, self.y + self.height / 2

@@ -2,11 +2,12 @@ from pico2d import *
 import game_framework
 import game_world
 import math
+import server
 import define
 
 from table import Table
 from stick import Stick
-from ball import Ball, is_ball_stop, is_balls_stop
+from ball import Ball
 from heart import Heart
 from wall import Wall
 from hole import Hole
@@ -51,9 +52,23 @@ def init():
     game_world.add_collision_pair('Wall:Ball', bottom_left_wall, None)
     game_world.add_collision_pair('Wall:Ball', bottom_right_wall, None)
 
+
+    holes = []
+    holes.append(Hole(135, 690, 60, 80))
+    holes.append(Hole(805, 700, 60, 60))
+    holes.append(Hole(1475, 690, 60, 80))
+    holes.append(Hole(135, 100, 60, 80))
+    holes.append(Hole(805, 90, 60, 60))
+    holes.append(Hole(1475, 100, 60, 80))
+    game_world.add_objects(holes, 0)
+    for h in holes:
+        game_world.add_collision_pair('Hole:Ball', h, None)
+
+
     white_ball = Ball(1000, 450, 3, 0)
     game_world.add_object(white_ball, 1)
     game_world.add_collision_pair('Wall:Ball', None, white_ball)
+    game_world.add_collision_pair('Hole:Ball', None, white_ball)
 
     stick = Stick(white_ball)
     game_world.add_object(stick, 1)
@@ -69,6 +84,8 @@ def init():
     for b in balls:
         game_world.add_collision_pair('Wall:Ball', None, b)
         game_world.add_collision_pair('Ball:Ball', b, b)
+    for b in balls:
+        game_world.add_collision_pair('Hole:Ball', None, b)
 
     heart = Heart()
     game_world.add_object(heart, 2)
@@ -86,8 +103,7 @@ def update():
     game_world.handle_collisions()
 
     # 공 속도 0되면 스틱 다시 나오게
-    if is_ball_stop(white_ball) and is_balls_stop(balls):
-        stick.state_machine.handle_event(('ALL_STOP', 0))
+    game_world.check_balls_stop()
 
 
 

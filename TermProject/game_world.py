@@ -1,3 +1,6 @@
+from ball import Ball
+from stick import Stick
+
 objects = [[] for _ in range(4)]
 
 
@@ -84,3 +87,19 @@ def handle_collisions():
                     a.handle_collision(group, b)
                     b.handle_collision(group, a)
     return None
+
+
+def is_balls_stop():
+    for layers in objects:
+        for o in layers:
+            if isinstance(o, Ball) and o.velo != 0:
+                return False
+
+    return True
+
+def check_balls_stop():
+    if is_balls_stop():
+        for layers in objects:
+            for o in layers:
+                if isinstance(o, Stick):
+                    o.state_machine.handle_event(('ALL_STOP', 0))

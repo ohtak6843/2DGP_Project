@@ -2,25 +2,11 @@ from pico2d import *
 from define import *
 from math import cos, sin, atan2, pi, sqrt
 
-from game_world import collide, remove_object
-
+import game_world
 import game_framework
 
 FRICTION_SPEED_MPS = 0.6
 FRICTION_SPEED_PPS = FRICTION_SPEED_MPS * PIXEL_PER_METER
-
-
-def is_ball_stop(b):
-    if b.velo is 0:
-        return True
-
-
-def is_balls_stop(balls):
-    for b in balls:
-        if not is_ball_stop(b):
-            return False
-
-    return True
 
 
 class Ball:
@@ -58,10 +44,10 @@ class Ball:
     def handle_collision(self, group, other):
         if self != other: print(f'collision : {group}')
         if group == 'Ball:Ball' and self != other:
-            if not collide(self, other): return
+            if not game_world.collide(self, other): return
 
             # 충돌 시 충돌 위치 재조정
-            while collide(self, other):
+            while game_world.collide(self, other):
                 self.x += self.velo * cos(self.degree + math.pi)
                 self.y += self.velo * sin(self.degree + math.pi)
                 other.x += other.velo * cos(other.degree + math.pi)
@@ -113,7 +99,7 @@ class Ball:
             self.velo = 3.0
         elif group == 'Wall:Ball':
             # 충돌 시 충돌 위치 재조정
-            while collide(self, other):
+            while game_world.collide(self, other):
                 self.x += cos(self.degree + math.pi)
                 self.y += sin(self.degree + math.pi)
 
@@ -123,4 +109,5 @@ class Ball:
 
             self.degree = out_degree
         elif group == 'Hole:Ball':
-            remove_object(self)
+            # self.velo = 0
+            game_world.remove_object(self)
