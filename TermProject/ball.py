@@ -4,12 +4,15 @@ from math import cos, sin, atan2, pi, sqrt
 
 from game_world import collide, remove_object
 
+import game_framework
 
+FRICTION_SPEED_MPS = 0.2
+FRICTION_SPEED_PPS = FRICTION_SPEED_MPS * PIXEL_PER_METER
 
 class Ball:
     image = None
 
-    size = [PIXEL_PER_METER * 0.06, PIXEL_PER_METER * 0.06]
+    size = PIXEL_PER_METER * 0.06
 
     def __init__(self, x, y, image_x=0, image_y=0):
         self.x = x
@@ -25,22 +28,20 @@ class Ball:
             Ball.image = load_image('balls.png')
 
     def draw(self):
-        Ball.image.clip_draw(self.image_x * 276, self.image_y * 276, 276, 276, self.x, self.y, Ball.size[0], Ball.size[1])  # 1/10 사이즈
+        Ball.image.clip_draw(self.image_x * 276, self.image_y * 276, 276, 276, self.x, self.y, Ball.size, Ball.size)
         draw_rectangle(*self.get_bb())
 
     def update(self):
-        self.x += self.velo * cos(self.degree)
-        self.y += self.velo * sin(self.degree)
+        self.x += game_framework.frame_time * (self.velo * PIXEL_PER_METER)* cos(self.degree)
+        self.y += game_framework.frame_time * (self.velo * PIXEL_PER_METER)* sin(self.degree)
 
-        BALL_SPEED_KMPH = 40.0  # Km / Hour
-        BALL_SPEED_MPM = (BALL_SPEED_KMPH * 1000.0 / 60.0)
-        BALL_SPEED_MPS = (BALL_SPEED_MPM / 60.0)
-        BALL_SPEED_PPS = (BALL_SPEED_MPS * PIXEL_PER_METER)
+        self.velo -= game_framework.frame_time * FRICTION_SPEED_MPS
+        if self.velo < 0: self.velo = 0
 
         pass
 
     def get_bb(self):
-        return self.x - Ball.size[0] / 2, self.y - Ball.size[1] / 2, self.x + Ball.size[0] / 2, self.y + Ball.size[1] / 2
+        return self.x - Ball.size / 2, self.y - Ball.size / 2, self.x + Ball.size / 2, self.y + Ball.size / 2
         pass
 
     def handle_collision(self, group, other):
@@ -98,7 +99,7 @@ class Ball:
             pass
         elif group == 'Stick:Ball':
             self.degree = other.degree + math.pi
-            self.velo = 10
+            self.velo = 1
             pass
         elif group == 'Wall:Ball':
             # 충돌 시 충돌 위치 재조정
