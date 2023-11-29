@@ -1,7 +1,11 @@
-Table = None
+table = None
 
-Stick = None
+wall = None
+
+stick = None
 
 white_ball = None
 
-Balls = None
+balls = []
+
+heart = None
