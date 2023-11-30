@@ -92,7 +92,6 @@ def init():
     # heart = Heart()
     # game_world.add_object(heart, 2)
 
-
     # table
     server.table = Table()
     game_world.add_object(server.table, 0)
@@ -107,7 +106,6 @@ def init():
     game_world.add_objects(server.walls, 0)
     for w in server.walls:
         game_world.add_collision_pair('Wall:Ball', w, None);
-
 
     # holes
     server.holes.append(Hole(135, 690, 60, 80))
@@ -159,10 +157,22 @@ def update():
     # 공 속도 0되면 스틱 다시 나오게
     server.check_balls_stop()
 
+    # 공 개수가 0이 되면 다음 스테이지로 넘어가기
+
 
 def draw():
     clear_canvas()
     game_world.render()
+
+    for w in server.walls:
+        draw_rectangle(*w.get_bb())
+
+    for h in server.holes:
+        draw_rectangle(*h.get_bb())
+
+    for o in game_world.objects[1]:
+        draw_rectangle(*o.get_bb())
+
     update_canvas()
 
 

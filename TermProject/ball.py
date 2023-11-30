@@ -30,7 +30,7 @@ class Ball:
 
     def draw(self):
         Ball.image.clip_draw(self.image_x * 276, self.image_y * 276, 276, 276, self.x, self.y, Ball.size, Ball.size)
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
 
     def update(self):
         self.x += game_framework.frame_time * (self.velo * PIXEL_PER_METER) * cos(self.degree)
@@ -97,7 +97,7 @@ class Ball:
 
         elif group == 'Stick:Ball':
             self.degree = other.degree + math.pi
-            self.velo = 3.0
+            self.velo = other.power
         elif group == 'Wall:Ball':
             # 충돌 시 충돌 위치 재조정
             while game_world.collide(self, other):

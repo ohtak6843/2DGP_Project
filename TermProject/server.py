@@ -27,6 +27,12 @@ def is_balls_stop():
 
     return True
 
+
 def check_balls_stop():
     if is_balls_stop() and white_ball.velo == 0 and stick != None:
         stick.state_machine.handle_event(('ALL_STOP', 0))
+
+
+def check_balls_void():
+    if len(balls) == 0:
+        return True

@@ -9,7 +9,6 @@ class Hole:
 
 
     def draw(self):
-        draw_rectangle(*self.get_bb())
         pass
 
 

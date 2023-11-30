@@ -22,14 +22,17 @@ def balls_all_stop(e):
     return e[0] == 'ALL_STOP'
 
 
-INIT_R = PIXEL_PER_METER * 1
-PULL_MAX_R = PIXEL_PER_METER * 1.5
+INIT_R = PIXEL_PER_METER * 1  # 450픽셀, 1미터
+PULL_MAX_R = PIXEL_PER_METER * 1.5  # 675픽셀, 1.5미터
 
 PULL_SPEED_MPS = 0.5
 PULL_SPEED_PPS = (PULL_SPEED_MPS * PIXEL_PER_METER)
 
 PUSH_SPEED_MPS = 3.0
 PUSH_SPEED_PPS = (PUSH_SPEED_MPS * PIXEL_PER_METER)
+
+POWER_INCREASE_SPEED = 3
+MAX_POWER_SPEED = 3
 
 
 class Idle:
@@ -65,8 +68,11 @@ class Pull:
 
     @staticmethod
     def do(stick):
-        if stick.r <= PULL_MAX_R:
-            stick.r += game_framework.frame_time * PULL_SPEED_PPS
+        stick.r += game_framework.frame_time * PULL_SPEED_PPS
+        stick.power += game_framework.frame_time * POWER_INCREASE_SPEED
+        if stick.r > PULL_MAX_R:
+            stick.r = PULL_MAX_R
+            stick.power = MAX_POWER_SPEED
 
         if get_time() - stick.wait_time >= 2:
             stick.r = INIT_R
@@ -173,6 +179,7 @@ class Stick:
         self.mouse_x = 0
         self.mouse_y = 0
         self.degree = 0
+        self.power = 0
 
         self.state_machine = stateMachine(self)
         self.state_machine.start()
@@ -182,8 +189,6 @@ class Stick:
 
     def draw(self):
         self.state_machine.draw()
-        if self.state_machine.cur_state != Hide:
-            draw_rectangle(*self.get_bb())
 
     def update(self):
         self.state_machine.update()
