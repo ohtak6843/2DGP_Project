@@ -4,14 +4,12 @@ main_file = 'main.py'# fill here
 # 데이타 파일들을 지정하세요.
 data_files = [
     # fill here
-    'football.mp3', 'zombie_pickup.wav', 'pickup.wav',
-    'animation_sheet.png', 'ball21x21.png', 'TUK_GROUND_FULL.png',
-    'ENCR10B.TTF'
+    'Balls.png', 'Heart.png', 'Stick.png',
+    'Table.jpg'
 ]
 
 # 데이타가 들어있는 폴더들을 지정하세요.
 data_folders = [
     # fill here
-    'zombie'
 ]
 
