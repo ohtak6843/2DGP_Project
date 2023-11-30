@@ -25,8 +25,6 @@ def balls_all_stop(e):
 INIT_R = PIXEL_PER_METER * 1
 PULL_MAX_R = PIXEL_PER_METER * 1.5
 
-# BALL_SPEED_KMPH = 40.0  # Km / Hour
-# BALL_SPEED_MPM = (BALL_SPEED_KMPH * 1000.0 / 60.0)
 PULL_SPEED_MPS = 0.5
 PULL_SPEED_PPS = (PULL_SPEED_MPS * PIXEL_PER_METER)
 
@@ -55,7 +53,7 @@ class Idle:
         stick.degree = atan2(dy, dx)
         Stick.image.composite_draw(stick.degree, '', stick.white_ball.x + stick.r * cos(stick.degree),
                                    stick.white_ball.y + stick.r * sin(stick.degree), Stick.width,
-                                   Stick.height)  # 1/5 사이즈
+                                   Stick.height)
         pass
 
 
@@ -212,3 +210,5 @@ class Stick:
     def handle_collision(self, group, other):
         if group == 'Stick:Ball':
             self.state_machine.handle_event(('BALL_COLLIDE', 0))
+            if self.state_machine == Idle:
+                print(123123123)

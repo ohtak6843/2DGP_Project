@@ -4,6 +4,7 @@ from math import cos, sin, atan2, pi, sqrt
 
 import game_world
 import game_framework
+import server
 
 FRICTION_SPEED_MPS = 0.6
 FRICTION_SPEED_PPS = FRICTION_SPEED_MPS * PIXEL_PER_METER
@@ -25,7 +26,7 @@ class Ball:
         self.degree = 0
 
         if Ball.image == None:
-            Ball.image = load_image('balls.png')
+            Ball.image = load_image('Balls.png')
 
     def draw(self):
         Ball.image.clip_draw(self.image_x * 276, self.image_y * 276, 276, 276, self.x, self.y, Ball.size, Ball.size)
@@ -109,5 +110,5 @@ class Ball:
 
             self.degree = out_degree
         elif group == 'Hole:Ball':
-            # self.velo = 0
             game_world.remove_object(self)
+            server.remove_ball(self)
