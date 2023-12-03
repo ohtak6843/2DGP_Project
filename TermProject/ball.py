@@ -25,11 +25,14 @@ class Ball:
         self.velo = 0
         self.degree = 0
 
+        self.hide = False
+
         if Ball.image == None:
             Ball.image = load_image('Balls.png')
 
     def draw(self):
-        Ball.image.clip_draw(self.image_x * 276, self.image_y * 276, 276, 276, self.x, self.y, Ball.size, Ball.size)
+        if self.hide == False:
+            Ball.image.clip_draw(self.image_x * 276, self.image_y * 276, 276, 276, self.x, self.y, Ball.size, Ball.size)
         # draw_rectangle(*self.get_bb())
 
     def update(self):
@@ -47,13 +50,6 @@ class Ball:
         if group == 'Ball:Ball' and self != other:
             if not game_world.collide(self, other): return
 
-            # 충돌 시 충돌 위치 재조정
-            while game_world.collide(self, other):
-                self.x += self.velo * cos(self.degree + math.pi)
-                self.y += self.velo * sin(self.degree + math.pi)
-                other.x += other.velo * cos(other.degree + math.pi)
-                other.y += other.velo * sin(other.degree + math.pi)
-
             # 각도 및 속도 조정
             dy = other.y - self.y
             dx = other.x - self.x
@@ -61,6 +57,16 @@ class Ball:
             temp = normalize(dx, dy)
             self_normalize_Nx, self_normalize_Ny = temp[0], temp[1]
             other_normalize_Nx, other_normalize_Ny = -temp[0], -temp[1]
+
+            self_degree = atan2(self_normalize_Ny, self_normalize_Nx)
+            other_degree = atan2(other_normalize_Ny, other_normalize_Nx)
+
+            # 충돌 시 충돌 위치 재조정
+            while game_world.collide(self, other):
+                self.x += cos(self_degree + math.pi)
+                self.y += sin(self_degree + math.pi)
+                other.x += cos(other_degree + math.pi)
+                other.y += sin(other_degree + math.pi)
 
             self_N_size = self.velo * cos(self.degree) * self_normalize_Nx + self.velo * sin(
                 self.degree) * self_normalize_Ny
@@ -98,6 +104,9 @@ class Ball:
         elif group == 'Stick:Ball':
             self.degree = other.degree + math.pi
             self.velo = other.power
+
+            other.power = 0
+            server.section = True
         elif group == 'Wall:Ball':
             # 충돌 시 충돌 위치 재조정
             while game_world.collide(self, other):
@@ -109,6 +118,10 @@ class Ball:
             out_degree = other.degree - in_degree
 
             self.degree = out_degree
+        elif group == 'Hole:White_Ball':
+            self.velo = 0
+            self.hide = True
+            game_world.remove_object(self)
         elif group == 'Hole:Ball':
             game_world.remove_object(self)
             server.remove_ball(self)
