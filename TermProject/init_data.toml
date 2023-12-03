@@ -1,0 +1,27 @@
+walls = [
+  {left = 70, bottom = 168, right = 150, top = 623, degree = 1.570796},
+  {left = 1463, bottom = 168, right = 1545, top = 623, degree = 1.570796},
+  {left = 203, bottom = 663, right = 760, top = 728, degree = 0},
+  {left = 852, bottom = 663, right = 1412, top = 728, degree = 0},
+  {left = 203, bottom = 63, right = 760, top = 128, degree = 0},
+  {left = 852, bottom = 63, right = 1412, top = 128, degree = 0}
+]
+
+
+holes = [
+  {x = 135, y = 690, width = 60, height = 80},
+  {x = 805, y = 700, width = 60, height = 60},
+  {x = 1475, y = 690, width = 60, height = 80},
+  {x = 135, y = 100, width = 60, height = 80},
+  {x = 805, y = 90, width = 60, height = 60},
+  {x = 1475, y = 100, width = 60, height = 80},
+]
+
+
+white_ball =  {x = 1200, y = 400, image_x = 3, image_y = 0}
+
+stage1_balls = [
+  {x = 500, y = 400, image_x = 0, image_y = 3},
+  {x = 460, y = 420, image_x = 1, image_y = 3},
+  {x = 460, y = 380, image_x = 2, image_y = 3}
+]
