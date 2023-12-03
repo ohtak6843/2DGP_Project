@@ -22,17 +22,17 @@ def balls_all_stop(e):
     return e[0] == 'ALL_STOP'
 
 
-INIT_R = PIXEL_PER_METER * 1  # 450픽셀, 1미터
-PULL_MAX_R = PIXEL_PER_METER * 1.5  # 675픽셀, 1.5미터
+INIT_R = PIXEL_PER_METER * 0.8  # 450픽셀, 1미터
+PULL_MAX_R = PIXEL_PER_METER * 1.2  # 675픽셀, 1.5미터
 
-PULL_SPEED_MPS = 0.5
+PULL_SPEED_MPS = 0.4
 PULL_SPEED_PPS = (PULL_SPEED_MPS * PIXEL_PER_METER)
 
 PUSH_SPEED_MPS = 3.0
 PUSH_SPEED_PPS = (PUSH_SPEED_MPS * PIXEL_PER_METER)
 
-POWER_INCREASE_SPEED = 3
-MAX_POWER_SPEED = 3
+POWER_INCREASE_SPEED = 3.0
+MAX_POWER_SPEED = 3.0
 
 
 class Idle:
@@ -169,6 +169,7 @@ class stateMachine:
 
 class Stick:
     image = None
+    stick_ball_sound = None
 
     width = PIXEL_PER_METER * 1.4
     height = PIXEL_PER_METER * 0.7
@@ -186,6 +187,8 @@ class Stick:
 
         if Stick.image == None:
             Stick.image = load_image('Stick.png')
+            Stick.stick_ball_sound = load_wav('sound/stick_ball_collide.wav')
+            Stick.stick_ball_sound.set_volume(16)
 
     def draw(self):
         self.state_machine.draw()
@@ -214,6 +217,7 @@ class Stick:
 
     def handle_collision(self, group, other):
         if group == 'Stick:Ball':
+            Stick.stick_ball_sound.play()
             self.state_machine.handle_event(('BALL_COLLIDE', 0))
             if self.state_machine == Idle:
                 print(123123123)

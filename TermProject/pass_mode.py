@@ -20,22 +20,21 @@ def handle_events():
             game_framework.quit()
 
 def init():
-    global image
+    global image, bgm
     global wait_time
 
-    if image == None:
+    if image is None:
         image = load_image('section/section-pass.png')
 
     if bgm == None:
-        pass
+        bgm = load_music('section/sectionpass.ogg')
+        bgm.set_volume(16)
+
     wait_time = get_time()
+    bgm.play()
 
 def finish():
-    global image
-
     server.section = False
-
-    del image
 
 def update():
     if get_time() - wait_time >= 1.5:

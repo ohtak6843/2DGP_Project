@@ -2,6 +2,8 @@ from pico2d import *
 from define import *
 
 import game_framework
+import game_world
+
 import stage_1
 import stage_2
 import server
@@ -18,21 +20,20 @@ def handle_events():
             game_framework.quit()
 
 def init():
-    global image
+    global image, bgm
     global wait_time
 
     if image == None:
         image = load_image('section/section-fail.png')
     if bgm == None:
-        pass
+        bgm = load_music('section/sectionfail.mp3')
+        bgm.set_volume(4)
+
     wait_time = get_time()
+    bgm.play()
 
 def finish():
-    global image
-
-
     server.section = False
-    del image
 
 def update():
     if get_time() - wait_time >= 2:

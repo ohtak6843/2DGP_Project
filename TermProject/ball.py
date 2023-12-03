@@ -12,6 +12,7 @@ FRICTION_SPEED_PPS = FRICTION_SPEED_MPS * PIXEL_PER_METER
 
 class Ball:
     image = None
+    ball_ball_sound = None
 
     size = PIXEL_PER_METER * 0.08
 
@@ -29,6 +30,8 @@ class Ball:
 
         if Ball.image == None:
             Ball.image = load_image('Balls.png')
+            Ball.ball_ball_sound = load_wav('sound/ball_ball_collide.wav')
+            Ball.ball_ball_sound.set_volume(16)
 
     def draw(self):
         if self.hide == False:
@@ -49,6 +52,8 @@ class Ball:
         if self != other: print(f'collision : {group}')
         if group == 'Ball:Ball' and self != other:
             if not game_world.collide(self, other): return
+
+            Ball.ball_ball_sound.play()
 
             # 각도 및 속도 조정
             dy = other.y - self.y
@@ -108,6 +113,8 @@ class Ball:
             other.power = 0
             server.section = True
         elif group == 'Wall:Ball':
+            Ball.ball_ball_sound.play()
+
             # 충돌 시 충돌 위치 재조정
             while game_world.collide(self, other):
                 self.x += cos(self.degree + math.pi)
@@ -119,9 +126,14 @@ class Ball:
 
             self.degree = out_degree
         elif group == 'Hole:White_Ball':
+            server.HPstatus = 'white_ball_in'
             self.velo = 0
             self.hide = True
             game_world.remove_object(self)
         elif group == 'Hole:Ball':
+            if server.HPstatus != 'white_ball_in':
+                server.HPstatus = 'ball_in'
+            server.score.point += server.score.doubleS * server.score.plusScore
+            server.score.doubleS += 1
             game_world.remove_object(self)
             server.remove_ball(self)
