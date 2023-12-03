@@ -9,8 +9,9 @@ class Table:
         self.y = y
         self.sizeX = sizeX
         self.sizeY = sizeY
-        if self.image == None:
-            self.image = load_image('Table.jpg')
+
+        if Table.image == None:
+            Table.image = load_image('Table.jpg')
 
     def draw(self):
         self.image.draw(self.x, self.y, self.sizeX, self.sizeY)

@@ -1,5 +1,4 @@
-from ball import Ball
-from stick import Stick
+import pickle
 
 objects = [[] for _ in range(4)]
 
@@ -89,17 +88,20 @@ def handle_collisions():
     return None
 
 
-def is_balls_stop():
-    for layers in objects:
-        for o in layers:
-            if isinstance(o, Ball) and o.velo != 0:
-                return False
+def all_objects():
+    for layer in objects:
+        for o in layer:
+            yield o
 
-    return True
 
-def check_balls_stop():
-    if is_balls_stop():
-        for layers in objects:
-            for o in layers:
-                if isinstance(o, Stick):
-                    o.state_machine.handle_event(('ALL_STOP', 0))
+def save():
+    game = [objects, collision_pairs]
+    with open('saved_data.pickle', 'wb') as f:
+        pickle.dump(game, f)
+
+
+def load():
+    global objects, collision_pairs
+    with open('saved_data.pickle', 'rb') as f:
+        game = pickle.load(f)
+        objects, collision_pairs = game[0], game[1]

@@ -21,3 +21,7 @@ class Heart:
 
     def update(self):
         pass
+
+
+    def HPdown(self, num):
+        self.HP = max(0, self.HP - num)
