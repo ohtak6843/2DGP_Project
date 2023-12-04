@@ -25,3 +25,7 @@ class Heart:
 
     def HPdown(self, num):
         self.HP = max(0, self.HP - num)
+
+
+    def HPup(self, num):
+        self.HP = min(self.HP + num, 6)
