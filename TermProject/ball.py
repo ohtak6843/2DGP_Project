@@ -131,8 +131,12 @@ class Ball:
             self.hide = True
             game_world.remove_object(self)
         elif group == 'Hole:Ball':
-            if server.HPstatus != 'white_ball_in':
+            if server.HPstatus == 'nothing_in':
                 server.HPstatus = 'ball_in'
+            if other.state == 'Minus':
+                server.HPstatus = 'ball_in_red'
+            if other.state == 'Plus':
+                server.stick.lineT += 3
             server.score.point += server.score.doubleS * server.score.plusScore
             server.score.doubleS += 1
             game_world.remove_object(self)

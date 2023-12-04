@@ -181,6 +181,7 @@ class Stick:
         self.mouse_y = 0
         self.degree = 0
         self.power = 0
+        self.lineT = 0
 
         self.state_machine = stateMachine(self)
         self.state_machine.start()
