@@ -1,3 +1,5 @@
+import random
+
 from table import Table
 from stick import Stick
 from ball import *
@@ -31,6 +33,8 @@ balls = []
 heart = None
 
 score = None
+
+background_music = None
 
 
 def load_saved_world():
@@ -85,8 +89,9 @@ def check_balls_stop():
             # 공 개수가 0이 되면 다음 스테이지로 넘어가기
             if check_balls_void():
                 game_framework.change_mode(stage2)
-
-            game_framework.push_mode(pass_mode)
+            else:
+                game_framework.push_mode(pass_mode)
+                server.heart.HPup(1)
         elif server.HPstatus == 'ball_in_red':
             game_framework.push_mode(fail_mode)
             server.load_saved_world()
@@ -104,9 +109,18 @@ def check_balls_stop():
 
         game_world.save()
         server.HPstatus = 'nothing_in'
+        server.stick.lineT = max(0, server.stick.lineT - 1)
+        set_hole_state(random.randrange(0, 6), random.randrange(0, 6))
 
 
 # HP가 0이 되면 게임 종료
 def check_HP_is_zero():
     if server.heart.HP <= 0:
         game_framework.change_mode(result_mode)
+
+
+def set_hole_state(a, b):
+    for h in server.holes:
+        h.state = 'Hole'
+    server.holes[a].state = 'Plus'
+    server.holes[b].state = 'Minus'
