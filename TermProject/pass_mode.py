@@ -27,7 +27,7 @@ def init():
         image = load_image('section/section-pass.png')
 
     if bgm == None:
-        bgm = load_music('section/sectionpass.ogg')
+        bgm = load_wav('section/sectionpass.ogg')
         bgm.set_volume(16)
 
     wait_time = get_time()

@@ -26,7 +26,7 @@ def init():
     if image == None:
         image = load_image('section/section-fail.png')
     if bgm == None:
-        bgm = load_music('section/sectionfail.mp3')
+        bgm = load_wav('section/sectionfail.mp3')
         bgm.set_volume(4)
 
     wait_time = get_time()
