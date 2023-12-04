@@ -3,6 +3,8 @@ from pico2d import *
 
 class Score:
     images = None
+    width = 40
+    height = 60
 
     init_double = 1
 
@@ -13,10 +15,16 @@ class Score:
 
         if Score.images == None:
             Score.images = [load_image('./score/score-' + '%d' % i + '@2x.png') for i in range(0, 10)]
-            Score.font = load_font('ENCR10B.TTF', 30)
 
     def draw(self):
-        Score.font.draw(1400, 760, f'{self.point}', (255, 255, 255))
+        temp_s = self.point
+        div = 0
+        while True:
+            if temp_s == 0 and div > 3: break
+            temp_r = temp_s % 10
+            temp_s = temp_s // 10
+            Score.images[temp_r].draw(1500 - Score.width * div, 765, Score.width, Score.height)
+            div += 1
 
     def update(self):
         pass
