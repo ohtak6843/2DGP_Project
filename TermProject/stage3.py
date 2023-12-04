@@ -8,8 +8,7 @@ import pickle
 import server
 import define
 
-import stage2_UI
-import stage3
+import stage3_UI
 import result_mode
 import pass_mode
 import fail_mode
@@ -31,7 +30,7 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
-            game_framework.change_mode(stage3)
+            game_framework.change_mode(result_mode)
         else:
             server.stick.handle_event(event)
 
@@ -87,7 +86,7 @@ def init():
     # balls
     server.balls = []
     with open('init_data.toml', 'rb') as f:
-        stage1_balls_list = tomllib.load(f)['stage2_balls']
+        stage1_balls_list = tomllib.load(f)['stage3_balls']
         for b in stage1_balls_list:
             ball = Ball(0, 0, 0, 0)
             ball.__dict__.update(b)
@@ -111,7 +110,7 @@ def init():
 
     game_world.save()
 
-    game_framework.push_mode(stage2_UI)
+    game_framework.push_mode(stage3_UI)
 
     pass
 

@@ -10,6 +10,7 @@ import define
 
 import stage1_UI
 import stage2
+import result_mode
 import pass_mode
 import fail_mode
 
@@ -53,7 +54,7 @@ def init():
             server.walls.append(wall)
     game_world.add_objects(server.walls, 0)
     for w in server.walls:
-        game_world.add_collision_pair('Wall:Ball', w, None);
+        game_world.add_collision_pair('Wall:Ball', w, None)
 
     # holes
     server.holes = []
@@ -100,15 +101,16 @@ def init():
     # heart
     if not server.heart:
         server.heart = Heart()
+    server.heart.HP = 6
     game_world.add_object(server.heart, 2)
 
     # score
-    if not server.score:
-        server.score = Score()
+    server.score = Score()
     game_world.add_object(server.score, 2)
 
     game_world.save()
 
+    server.stick.lineT = 50
     game_framework.push_mode(stage1_UI)
 
     pass
