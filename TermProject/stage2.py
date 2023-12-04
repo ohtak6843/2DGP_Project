@@ -126,7 +126,7 @@ def update():
     game_world.update()
     game_world.handle_collisions()
 
-    server.check_balls_stop()
+    server.check_balls_stop(stage3)
     server.check_HP_is_zero()
 
 

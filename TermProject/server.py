@@ -10,6 +10,8 @@ from score import Score
 
 import stage1
 import stage2
+import stage3
+import result_mode
 
 import pass_mode
 import fail_mode
@@ -82,13 +84,13 @@ def is_balls_stop():
     return True
 
 
-def check_balls_stop():
+def check_balls_stop(next_stage):
     if server.is_balls_stop() and server.white_ball.velo == 0 and server.section == True:
         server.stick.state_machine.handle_event(('ALL_STOP', 0))
         if server.HPstatus == 'ball_in':
             # 공 개수가 0이 되면 다음 스테이지로 넘어가기
             if check_balls_void():
-                game_framework.change_mode(stage2)
+                game_framework.change_mode(next_stage)
             else:
                 game_framework.push_mode(pass_mode)
                 server.heart.HPup(1)

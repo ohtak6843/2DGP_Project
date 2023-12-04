@@ -4,12 +4,16 @@ main_file = 'main.py'# fill here
 # 데이타 파일들을 지정하세요.
 data_files = [
     # fill here
-    'Balls.png', 'Heart.png', 'Stick.png',
-    'Table.jpg'
+    'balls.png', 'Heart.png', 'Stick.png', 'line.png',
+    'Table.jpg', 'title.png', 'result.jpg',
+    'init_data.toml',
+    'background_music.mp3', 'ENCR10B.TTF',
 ]
 
 # 데이타가 들어있는 폴더들을 지정하세요.
 data_folders = [
     # fill here
+    'hole', 'score', 'section',
+    'sound', 'stage_UI'
 ]
 
