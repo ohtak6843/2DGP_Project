@@ -4,8 +4,8 @@ from define import *
 import game_framework
 import game_world
 
-import stage_1
-import stage_2
+import stage1
+import stage2
 import server
 
 image = None

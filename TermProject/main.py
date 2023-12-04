@@ -3,8 +3,8 @@ import game_framework
 import define
 
 import title_mode as start_mode
-import stage_1
-import stage_2
+import stage1
+import stage2
 
 
 open_canvas(define.WINDOW_WIDTH, define.WINDOW_HEIGHT, sync=True)

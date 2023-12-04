@@ -6,6 +6,12 @@ from wall import Wall
 from hole import Hole
 from score import Score
 
+import stage1
+import stage2
+
+import pass_mode
+import fail_mode
+
 section = False
 
 HPstatus = 'nothing_in'
@@ -25,6 +31,7 @@ balls = []
 heart = None
 
 score = None
+
 
 def load_saved_world():
     global table, walls, holes, white_ball, stick, balls, heart, score
@@ -50,11 +57,17 @@ def load_saved_world():
         elif isinstance(o, Score):
             score = o
 
+
 def remove_ball(b):
     for i in range(len(balls)):
         if b == balls[i]:
             del balls[i]
             break
+
+
+def check_balls_void():
+    if len(balls) == 0:
+        return True
 
 
 def is_balls_stop():
@@ -66,10 +79,34 @@ def is_balls_stop():
 
 
 def check_balls_stop():
-    if is_balls_stop() and white_ball.velo == 0 and section is True:
-        stick.state_machine.handle_event(('ALL_STOP', 0))
+    if server.is_balls_stop() and server.white_ball.velo == 0 and server.section == True:
+        server.stick.state_machine.handle_event(('ALL_STOP', 0))
+        if server.HPstatus == 'ball_in':
+            # 공 개수가 0이 되면 다음 스테이지로 넘어가기
+            if check_balls_void():
+                game_framework.change_mode(stage2)
+
+            game_framework.push_mode(pass_mode)
+        elif server.HPstatus == 'ball_in_red':
+            game_framework.push_mode(fail_mode)
+            server.load_saved_world()
+            server.heart.HPdown(1)
+            server.score.doubleS = Score.init_double
+        elif server.HPstatus == 'nothing_in':
+            game_framework.push_mode(fail_mode)
+            server.heart.HPdown(1)
+            server.score.doubleS = Score.init_double
+        elif server.HPstatus == 'white_ball_in':
+            game_framework.push_mode(fail_mode)
+            server.load_saved_world()
+            server.heart.HPdown(2)
+            server.score.doubleS = Score.init_double
+
+        game_world.save()
+        server.HPstatus = 'nothing_in'
 
 
-def check_balls_void():
-    if len(balls) == 0:
-        return True
+# HP가 0이 되면 게임 종료
+def check_HP_is_zero():
+    if server.heart.HP <= 0:
+        game_framework.change_mode(result_mode)
