@@ -7,7 +7,9 @@ import pickle
 
 import server
 import define
-import stage_2
+
+import stage1_UI
+import stage2
 import pass_mode
 import fail_mode
 
@@ -28,7 +30,7 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
-            game_framework.push_mode(pass_mode)
+            game_framework.change_mode(stage2)
         else:
             server.stick.handle_event(event)
 
@@ -58,7 +60,7 @@ def init():
     with open('init_data.toml', 'rb') as f:
         holes_data_list = tomllib.load(f)['holes']
         for h in holes_data_list:
-            hole = Hole(0, 0, 0, 0)
+            hole = Hole(0, 0)
             hole.__dict__.update(h)
             server.holes.append(hole)
     game_world.add_objects(server.holes, 0)
@@ -107,6 +109,8 @@ def init():
 
     game_world.save()
 
+    game_framework.push_mode(stage1_UI)
+
     pass
 
 
@@ -120,47 +124,22 @@ def update():
     game_world.update()
     game_world.handle_collisions()
 
-    # 공 속도 0되면 스틱 다시 나오게
-    if server.is_balls_stop() and server.white_ball.velo == 0 and server.section == True:
-        server.stick.state_machine.handle_event(('ALL_STOP', 0))
-        if server.HPstatus == 'ball_in':
-            game_framework.push_mode(pass_mode)
-        elif server.HPstatus == 'nothing_in':
-            game_framework.push_mode(fail_mode)
-            server.heart.HPdown(1)
-            server.score.doubleS = Score.init_double
-        elif server.HPstatus == 'white_ball_in':
-            game_framework.push_mode(fail_mode)
-            server.load_saved_world()
-            server.heart.HPdown(2)
-            server.score.doubleS = Score.init_double
-
-        game_world.save()
-        server.HPstatus = 'nothing_in'
-
-    # 공 개수가 0이 되면 다음 스테이지로 넘어가기
-    if len(server.balls) < 1:
-        game_framework.change_mode(stage_2)
-        game_framework.push_mode(pass_mode)
-
-
-    # HP가 0이 되면 게임 종료
-    if server.heart.HP == 0:
-        game_framework.change_mode(result_mode)
+    server.check_balls_stop()
+    server.check_HP_is_zero()
 
 
 def draw():
     clear_canvas()
     game_world.render()
 
-    for w in server.walls:
-        draw_rectangle(*w.get_bb())
-
-    for h in server.holes:
-        draw_rectangle(*h.get_bb())
-
-    for o in game_world.objects[1]:
-        draw_rectangle(*o.get_bb())
+    # for w in server.walls:
+    #     draw_rectangle(*w.get_bb())
+    #
+    # for h in server.holes:
+    #     draw_rectangle(*h.get_bb())
+    #
+    # for o in game_world.objects[1]:
+    #     draw_rectangle(*o.get_bb())
 
     update_canvas()
 
