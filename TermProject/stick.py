@@ -78,6 +78,7 @@ class Pull:
 
         if get_time() - stick.wait_time >= 2:
             stick.r = INIT_R
+            stick.power = 0
             stick.wait_time = get_time()
         pass
 
@@ -131,6 +132,7 @@ class Hide:
 
     @staticmethod
     def exit(stick, e):
+        stick.power = 0
         pass
 
     @staticmethod
