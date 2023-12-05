@@ -107,10 +107,10 @@ def init():
     # score
     server.score = Score()
     game_world.add_object(server.score, 2)
+    server.stick.lineT = True
 
     game_world.save()
 
-    server.stick.lineT = 50
     game_framework.push_mode(stage1_UI)
 
     pass
@@ -133,16 +133,6 @@ def update():
 def draw():
     clear_canvas()
     game_world.render()
-
-    # for w in server.walls:
-    #     draw_rectangle(*w.get_bb())
-    #
-    # for h in server.holes:
-    #     draw_rectangle(*h.get_bb())
-    #
-    # for o in game_world.objects[1]:
-    #     draw_rectangle(*o.get_bb())
-
     update_canvas()
 
 

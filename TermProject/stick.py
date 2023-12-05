@@ -184,8 +184,7 @@ class Stick:
         self.mouse_y = 0
         self.degree = 0
         self.power = 0
-        self.lineT = 0
-        self.line_image
+        self.lineT = False
 
         self.state_machine = stateMachine(self)
         self.state_machine.start()
@@ -198,7 +197,7 @@ class Stick:
 
     def draw(self):
         self.state_machine.draw()
-        if self.lineT > 0 and self.state_machine.cur_state != Hide:
+        if self.lineT == True and self.state_machine.cur_state != Hide:
             Stick.line_image.composite_draw(self.degree + math.pi, '', self.white_ball.x + LINE_R * cos(self.degree + math.pi),
                                        self.white_ball.y + LINE_R * sin(self.degree + math.pi), self.width / 2,
                                        self.height / 2)  # 1/5 사이즈

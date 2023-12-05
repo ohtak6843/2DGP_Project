@@ -36,3 +36,7 @@ class Hole:
 
     def get_bb(self):
         return self.x - Hole.size / 2, self.y - Hole.size / 2, self.x + Hole.size / 2, self.y + Hole.size / 2
+
+
+    def get_radius(self):
+        return PIXEL_PER_METER * 0.11
