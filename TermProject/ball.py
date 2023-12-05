@@ -48,10 +48,13 @@ class Ball:
     def get_bb(self):
         return self.x - Ball.size / 2, self.y - Ball.size / 2, self.x + Ball.size / 2, self.y + Ball.size / 2
 
+    def get_radius(self):
+        return Ball.size / 2
+
     def handle_collision(self, group, other):
         if self != other: print(f'collision : {group}')
         if group == 'Ball:Ball' and self != other:
-            if not game_world.collide(self, other): return
+            if not game_world.ball_collide(self, other): return
 
             Ball.ball_ball_sound.play()
 
@@ -67,7 +70,7 @@ class Ball:
             other_degree = atan2(other_normalize_Ny, other_normalize_Nx)
 
             # 충돌 시 충돌 위치 재조정
-            while game_world.collide(self, other):
+            while game_world.ball_collide(self, other):
                 self.x += cos(self_degree + math.pi)
                 self.y += sin(self_degree + math.pi)
                 other.x += cos(other_degree + math.pi)
@@ -126,18 +129,25 @@ class Ball:
 
             self.degree = out_degree
         elif group == 'Hole:White_Ball':
+            if not game_world.ball_collide(self, other): return
+
             server.HPstatus = 'white_ball_in'
             self.velo = 0
             self.hide = True
             game_world.remove_object(self)
         elif group == 'Hole:Ball':
+            if not game_world.ball_collide(self, other): return
             if server.HPstatus == 'nothing_in':
                 server.HPstatus = 'ball_in'
             if other.state == 'Minus':
                 server.HPstatus = 'ball_in_red'
             if other.state == 'Plus':
-                server.stick.lineT += 3
-            server.score.point += server.score.doubleS * server.score.plusScore
-            server.score.doubleS += 1
+                server.stick.lineT = True
+
+            if other.state == 'Plus':
+                server.score.point += server.score.doubleS * server.score.plusScore * 3
+            else:
+                server.score.point += server.score.doubleS * server.score.plusScore
+                server.score.doubleS += 1
             game_world.remove_object(self)
             server.remove_ball(self)

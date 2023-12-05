@@ -56,6 +56,15 @@ def collide(a, b):
     return True
 
 
+def ball_collide(a, b):
+    distance = (a.x - b.x) ** 2 + (a.y - b.y) ** 2
+
+    if distance <= (a.get_radius() + b.get_radius()) ** 2:
+        return True
+
+    return False
+
+
 # 충돌의 세계
 collision_pairs = {}  # { 'boy:ball' : [ [boy], [ball1, ball2, ball3, ... ] ]
 

@@ -111,7 +111,6 @@ def check_balls_stop(next_stage):
 
         game_world.save()
         server.HPstatus = 'nothing_in'
-        server.stick.lineT = max(0, server.stick.lineT - 1)
         set_hole_state(random.randrange(0, 6), random.randrange(0, 6))
 
 
