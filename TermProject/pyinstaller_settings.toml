@@ -6,7 +6,7 @@ data_files = [
     # fill here
     'balls.png', 'Heart.png', 'Stick.png', 'line.png',
     'Table.jpg', 'title.png', 'result.jpg',
-    'init_data.toml',
+    'help.png', 'init_data.toml',
     'background_music.mp3', 'ENCR10B.TTF',
 ]
 
